@@ -28,8 +28,12 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contr
 
 Then just add the following contract codes
 
-contract simpleErc721 is Context, AccessControl, ERC721 {
-    using Counters for Counters.Counter;
+
+##
+
+contract simpleErc721 is Context, AccessControl, ERC721{
+
+using Counters for Counters.Counter;
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
@@ -59,6 +63,7 @@ contract simpleErc721 is Context, AccessControl, ERC721 {
         return _tokenData[tokenId];
     }
 }
+##
 
 Our simple ERC721 contract inherits methods from the well tested ERC721.sol of OpenZeppelin.
 The contract also uses {AccessControl} to lock permissioned functions using the
@@ -83,8 +88,16 @@ Click on the compiler tab on Remix to compile the smart contract.
 
 Deploying.
 
-Make sure you have faucet Ropsten ether in your Metamask wallet. Click on the deployment tab and Deploy the simple ERC721 contract
+Make sure you have faucet Ropsten ether in your Metamask wallet. Click on the deployment tab and Deploy the simple ERC721 contract.
+
+
 Mapping to Polygon Pos Bridge.
+
+we shall be using the proof of stake bridge and metamask to be able to move assets from our root chain(ethereum) to our child chain(matic)
+
+Bridging via Pos using Metamask
+
+
 You can configure the Matic Mumbai Testnet URL on your Metamask.
 Please add the following settings to your network selection of custom RPC
 
@@ -100,5 +113,23 @@ Block Explorer URL – https://mumbai-explorer.matic.today
 
 You need to also submit a mapping request to https://mapper.matic.today/ to be able to transfer assets such as the SimpleERC721 we created to and fro the ethereum and matic network
 
+
+Deposit ERC721 -
+
+Approve ERC721Predicate contract to spend the tokens that have to be deposited.
+
+Make depositFor call on RootChainManager.
+Withdraw ERC721 -
+
+Burn tokens on matic chain.
+
+Call exit function on RootChainManager to submit proof of burn transaction. This call can be made after checkpoint is submitted for the block containing burn transaction.
+
+
+Once the checkpoint is submitted to the mainchain ERC20 contract, an NFT Exit (ERC721) token is created of equivalent value. Users need to wait for a 7 day challenge period (For testnets wait for ~5 minutes for)
+Once the challenge period is complete, the withdrawn funds can be claimed back to your ERC20 acccount from the mainchain contract using a process-exit procedure.
+
+
 Contributing
+
 This contract is open to contribution.
